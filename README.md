@@ -1,54 +1,79 @@
-# React + TypeScript + Vite
+# WaiterApp (Web)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Web client of the WaiterApp, an app made to help waiters to manage orders.
 
-Currently, two official plugins are available:
+## Technologies
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+These are some of the tecnologies used in this project:
 
-## Expanding the ESLint configuration
+- `commitlint`: A tool that checks your commits and ensures consistency in version control.
+- `eslint`: A linting tool for JavaScript/TypeScript code.
+- `husky`: A tool for adding Git hooks to automate tasks like linting, testing, or commits in JavaScript/Node.js projects.
+- `lint-staged`: Runs linters on Git staged files.
+- `prettier`: A code formatter.
+- `react`: A JavaScript library for building user interfaces or UI components.
+- `styled-components`: A library for React and React Native that allows you to use component-level styles in your application.
+- `tsx`: A command-line tool and Node.js enhancement that allows you to execute TypeScript files directly without needing to explicitly compile them to JavaScript first.
+- `typescript`: A superset of JavaScript that introduces optional static typing, interfaces, enums, and other language features.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+_For more information about other dependencies, see the `package.json` file._
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/thiagocrux/waiterapp-web.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Browse to the project folder:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+cd waiterapp-web
 ```
+
+3. Install dependencies:
+
+```
+pnpm install
+```
+
+## Available scripts
+
+This section describes the available scripts in the `package.json` file and their functionalities.
+
+### Development
+
+- #### `dev`
+
+  Starts the server in development mode, enabling faster builds and live-reloading.
+
+  ```bash
+  pnpm dev
+  ```
+
+### Production
+
+- #### `build`
+
+  Compiles the application for production.
+
+  ```bash
+  pnpm build
+  ```
+
+- #### `start`
+
+  Start the server for production from the compiled files.
+
+  ```bash
+  pnpm start
+  ```
+
+## Useful links
+
+- [JStack](https://app.jstack.com.br/)
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
