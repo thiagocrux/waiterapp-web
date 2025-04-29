@@ -6,4 +6,8 @@ export const Container = styled.div`
   margin: 40px auto;
   display: flex;
   gap: 32px;
+
+  @media (max-width: 1250px) {
+    padding: 0 16px;
+  }
 `;
