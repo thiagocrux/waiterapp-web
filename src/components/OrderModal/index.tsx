@@ -12,6 +12,7 @@ interface OrderModalProps {
   isLoading: boolean;
   onClose: () => void;
   onCancelOrder: () => Promise<void>;
+  onChangeOrderStatus: () => Promise<void>;
 }
 
 export default function OrderModal({
@@ -20,6 +21,7 @@ export default function OrderModal({
   isLoading,
   onClose,
   onCancelOrder,
+  onChangeOrderStatus,
 }: OrderModalProps) {
   useEffect(() => {
     function handleEscapePress(event: KeyboardEvent) {
@@ -92,17 +94,30 @@ export default function OrderModal({
           </div>
         </OrderDetails>
         <Actions>
-          <button type="button" disabled={isLoading} className="primary">
-            <span>🧑‍🍳</span>
-            <span>Iniciar produção</span>
-          </button>
+          {order.status !== 'DONE' && (
+            <button
+              type="button"
+              disabled={isLoading}
+              className="primary"
+              onClick={onChangeOrderStatus}
+            >
+              <span>
+                {order.status === 'WAITING' && '🧑‍🍳'}
+                {order.status === 'IN_PRODUCTION' && '✅'}
+              </span>
+              <span>
+                {order.status === 'WAITING' && 'Iniciar produção'}
+                {order.status === 'IN_PRODUCTION' && 'Concluir pedido'}
+              </span>
+            </button>
+          )}
           <button
             type="button"
             disabled={isLoading}
             className="secondary"
             onClick={onCancelOrder}
           >
-            Cancelar Pedido
+            {order.status === 'DONE' ? 'Deletar Pedido' : 'Cancelar Pedido'}
           </button>
         </Actions>
       </ModalBody>

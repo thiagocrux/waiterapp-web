@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import type { Order } from '../../types';
+import { api } from '../../utils';
 import OrderModal from '../OrderModal';
 
-import { api } from '../../utils';
 import { Board, OrdersContainer } from './styles';
 
 interface OrdersBoardProps {
@@ -12,6 +12,7 @@ interface OrdersBoardProps {
   title: string;
   orders: Order[];
   onCancelOrder: (orderId: string) => void;
+  onStatusUpdate: (orderId: string, status: Order['status']) => void;
 }
 
 export default function OrdersBoard({
@@ -19,22 +20,43 @@ export default function OrdersBoard({
   title,
   orders,
   onCancelOrder,
+  onStatusUpdate,
 }: OrdersBoardProps) {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setModalVisibility] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isLoading, setLoading] = useState(false);
 
-  function handleModalOpening(order: Order) {
-    setIsModalVisible(true);
+  function openModal(order: Order) {
+    setModalVisibility(true);
     setSelectedOrder(order);
   }
 
-  function handleModalClosing() {
-    setIsModalVisible(false);
+  function closeModal() {
+    setModalVisibility(false);
     setSelectedOrder(null);
   }
 
-  async function handleOrderCancellation() {
+  async function updateOrderStatus() {
+    if (!selectedOrder) {
+      return;
+    }
+
+    const status =
+      selectedOrder.status === 'WAITING' ? 'IN_PRODUCTION' : 'DONE';
+
+    setLoading(true);
+    await api.patch(`/orders/${selectedOrder._id}`, { status });
+
+    toast.success(
+      `O pedido da mesa ${selectedOrder.table} teve seu status atualizado!`
+    );
+
+    onStatusUpdate(selectedOrder._id, status);
+    setLoading(false);
+    setModalVisibility(false);
+  }
+
+  async function cancelOrder() {
     if (!selectedOrder) {
       return;
     }
@@ -44,7 +66,7 @@ export default function OrdersBoard({
     toast.success(`O pedido da mesa ${selectedOrder.table} foi cancelado!`);
     onCancelOrder(selectedOrder._id);
     setLoading(false);
-    setIsModalVisible(false);
+    setModalVisibility(false);
   }
 
   return (
@@ -53,8 +75,9 @@ export default function OrdersBoard({
         order={selectedOrder}
         isVisible={isModalVisible}
         isLoading={isLoading}
-        onClose={handleModalClosing}
-        onCancelOrder={handleOrderCancellation}
+        onClose={closeModal}
+        onCancelOrder={cancelOrder}
+        onChangeOrderStatus={updateOrderStatus}
       />
       <header>
         <span>{icon}</span>
@@ -64,11 +87,7 @@ export default function OrdersBoard({
       {orders.length > 0 && (
         <OrdersContainer>
           {orders.map((order, index) => (
-            <button
-              type="button"
-              key={index}
-              onClick={() => handleModalOpening(order)}
-            >
+            <button type="button" key={index} onClick={() => openModal(order)}>
               <strong>Mesa {order.table}</strong>
               <span>
                 {`${order.products.length} ${

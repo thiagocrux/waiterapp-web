@@ -19,9 +19,20 @@ export default function Orders() {
     done: orders.filter((order) => order.status === 'DONE'),
   };
 
-  function updateOrdersAfterCancellation(orderId: string) {
+  function updateOrdersAfterOrderCancellation(orderId: string) {
     setOrders((prevState) =>
       prevState.filter((order) => order._id !== orderId)
+    );
+  }
+
+  function updateOrdersAfterStatusChange(
+    orderId: string,
+    status: Order['status']
+  ) {
+    setOrders((prevState) =>
+      prevState.map((order) =>
+        order._id === orderId ? { ...order, status } : order
+      )
     );
   }
 
@@ -31,19 +42,22 @@ export default function Orders() {
         icon="🕑"
         title="Fila de espera"
         orders={ordersByStatus.waiting}
-        onCancelOrder={updateOrdersAfterCancellation}
+        onCancelOrder={updateOrdersAfterOrderCancellation}
+        onStatusUpdate={updateOrdersAfterStatusChange}
       />
       <OrdersBoard
         icon="🧑‍🍳"
         title="Em preparação"
         orders={ordersByStatus.inProduction}
-        onCancelOrder={updateOrdersAfterCancellation}
+        onCancelOrder={updateOrdersAfterOrderCancellation}
+        onStatusUpdate={updateOrdersAfterStatusChange}
       />
       <OrdersBoard
         icon="✅"
         title="Pronto!"
         orders={ordersByStatus.done}
-        onCancelOrder={updateOrdersAfterCancellation}
+        onCancelOrder={updateOrdersAfterOrderCancellation}
+        onStatusUpdate={updateOrdersAfterStatusChange}
       />
     </Container>
   );
