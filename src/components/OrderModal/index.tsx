@@ -7,15 +7,19 @@ import { formatCurrency } from '../../utils';
 import { Actions, ModalBody, OrderDetails, Overlay } from './styles';
 
 interface OrderModalProps {
-  isVisible: boolean;
   order: Order | null;
+  isVisible: boolean;
+  isLoading: boolean;
   onClose: () => void;
+  onCancelOrder: () => Promise<void>;
 }
 
 export default function OrderModal({
-  isVisible,
   order,
+  isVisible,
+  isLoading,
   onClose,
+  onCancelOrder,
 }: OrderModalProps) {
   useEffect(() => {
     function handleEscapePress(event: KeyboardEvent) {
@@ -44,15 +48,12 @@ export default function OrderModal({
       <ModalBody>
         <header>
           <strong>Mesa {order.table}</strong>
-
           <span role="button" onClick={onClose}>
             <img src={closeIcon} alt="Close button" />
           </span>
         </header>
-
         <div className="status-container">
           <small>Status do Pedido</small>
-
           <div>
             <span>
               {order.status === 'WAITING' && '🕑'}
@@ -66,10 +67,8 @@ export default function OrderModal({
             </strong>
           </div>
         </div>
-
         <OrderDetails>
           <strong>Itens</strong>
-
           <div className="order-items">
             {order.products.map(({ _id, product, quantity }) => (
               <div className="item" key={_id}>
@@ -87,19 +86,22 @@ export default function OrderModal({
               </div>
             ))}
           </div>
-
           <div className="total">
             <span>Total</span>
             <strong>{formatCurrency(totalValue)}</strong>
           </div>
         </OrderDetails>
-
         <Actions>
-          <button type="button" className="primary">
+          <button type="button" disabled={isLoading} className="primary">
             <span>🧑‍🍳</span>
             <span>Iniciar produção</span>
           </button>
-          <button type="button" className="secondary">
+          <button
+            type="button"
+            disabled={isLoading}
+            className="secondary"
+            onClick={onCancelOrder}
+          >
             Cancelar Pedido
           </button>
         </Actions>
