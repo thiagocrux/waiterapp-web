@@ -78,7 +78,7 @@ This section describes the available scripts in the `package.json` file and thei
 ![image](https://i.ibb.co/YFpghnzT/waiterapp-screen-1.png)
 ![image](https://i.ibb.co/jk9dNJ2Z/waiterapp-screen-2.png)
 
-## Useful links
+## Related links
 
 - [JStack](https://app.jstack.com.br/)
 
